@@ -1,6 +1,6 @@
 # @mempalace/mcp-dev
 
-An MCP (Model Context Protocol) server that gives AI coding assistants grounded, branch-scoped context about your codebase. It provides semantic code search via [MemPalace](https://github.com/2loch-ness6/mempalace), git change tracking, a persistent change ledger, TypeScript/Jest dev lifecycle tools, and a built-in **Project Tracks** (Conductor) methodology for structured feature work.
+An MCP (Model Context Protocol) server that gives AI coding assistants grounded, branch-scoped context about your codebase. It provides semantic code search via [my MemPalace fork](https://github.com/2loch-ness6/mempalace), git change tracking, a persistent change ledger, TypeScript/Jest dev lifecycle tools, and a built-in **Project Tracks** (Conductor) methodology for structured feature work.
 
 ## Features
 
@@ -25,7 +25,7 @@ An MCP (Model Context Protocol) server that gives AI coding assistants grounded,
 
 > ⚠️ **This MCP server requires a custom fork of MemPalace** with multi-branch
 exclude-patterns support. The official `pip install mempalace` package will
-**not** work — you must use [Lochlyn's fork](https://github.com/2loch-ness6/mempalace)
+**not** work — you must use [my fork](https://github.com/2loch-ness6/mempalace)
 (branch `feat/exclude-patterns-config`).
 
 The easiest way to get this set up is the **setup script** (see Quick Start).
@@ -39,7 +39,7 @@ The easiest way to get this set up is the **setup script** (see Quick Start).
 The fastest way to get up and running is the bootstrap script at
 `scripts/setup-mempalace.sh`. It handles the entire MemPalace setup:
 
-- Clones Lochlyn's fork with the required exclude-patterns support
+- Clones my fork with the required exclude-patterns support
 - Creates a Python virtual environment
 - Installs the fork in editable mode
 - Symlinks the `mempalace` CLI to `~/.local/bin`
@@ -58,7 +58,7 @@ The script is fully configurable via environment variables:
 
 | Env var | Default | Description |
 |---|---|---|
-| `MEMPALACE_FORK_URL` | `https://github.com/2loch-ness6/mempalace` | Fork with required exclude-patterns support |
+| `MEMPALACE_FORK_URL` | `https://github.com/2loch-ness6/mempalace` | My fork with required exclude-patterns support |
 | `MEMPALACE_FORK_BRANCH` | `feat/exclude-patterns-config` | Branch containing the feature |
 | `MEMPALACE_FORK_DIR` | `$HOME/.mempalace-fork` | Where to clone the fork |
 | `MEMPALACE_VENV_DIR` | `$HOME/.mempalace` | Python venv location |

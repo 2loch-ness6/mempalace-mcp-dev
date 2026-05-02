@@ -1,0 +1,12 @@
+{
+  "id": "{{slug}}",
+  "title": "{{title}}",
+  "type": "{{type}}",
+  "status": "active",
+  "owner": "{{owner}}",
+  "created": "{{date}}",
+  "completed": "",
+  "template": "",
+  "governanceArtifact": "",
+  "dependencies": []
+}

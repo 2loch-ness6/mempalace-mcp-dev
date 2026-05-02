@@ -1,0 +1,53 @@
+# mempalace.yaml.example
+#
+# Copy this file to the root of your repository as `mempalace.yaml` and
+# configure it to match your project layout.
+#
+# The `wing` must match your MCP_PALACE_WING environment variable.
+
+wing: code
+
+exclude_patterns:
+  # Build outputs
+  - "dist/**"
+  - "build/**"
+  - "out/**"
+  - ".next/**"
+  - ".nuxt/**"
+  # Dependencies
+  - "node_modules/**"
+  - ".venv/**"
+  - "vendor/**"
+  # Generated / lock files
+  - "*.lock"
+  - "package-lock.json"
+  - "yarn.lock"
+  # Test snapshots and fixtures
+  - "**/__snapshots__/**"
+  - "**/__fixtures__/**"
+  # Coverage / reports
+  - "coverage/**"
+  - ".nyc_output/**"
+  # Hidden / tooling
+  - ".git/**"
+  - ".mcp-dev/**"
+  - ".palace/**"
+
+# Rooms define semantic routing for search scoping.
+# A file is placed in the first room whose keywords match its path.
+# Files that match no room go to "general".
+#
+# Customize these rooms to match your project structure.
+rooms:
+  - name: frontend
+    keywords: ["frontend", "client", "web", "ui", "view", "component", "page"]
+  - name: backend
+    keywords: ["backend", "server", "service", "api", "controller", "handler"]
+  - name: database
+    keywords: ["database", "db", "migration", "schema", "model", "entity", "repository"]
+  - name: tests
+    keywords: ["test", "spec", "e2e", "fixture"]
+  - name: scripts
+    keywords: ["script", "util", "helper", "tool"]
+  - name: general
+    keywords: []

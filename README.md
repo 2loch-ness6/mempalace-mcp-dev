@@ -18,22 +18,62 @@ An MCP (Model Context Protocol) server that gives AI coding assistants grounded,
 ## Prerequisites
 
 - **Node.js** ≥ 18
-- **Python** ≥ 3.9 with [MemPalace](https://github.com/2loch-ness6/mempalace) installed
+- **Python** ≥ 3.9
 - A git repository to point at
 
-### Install MemPalace
+### Important: MemPalace Fork Required
 
-```bash
-pip install mempalace
-# or from the fork with exclude-patterns support:
-pip install git+https://github.com/2loch-ness6/mempalace@feat/exclude-patterns-config
-```
+> ⚠️ **This MCP server requires a custom fork of MemPalace** with multi-branch
+exclude-patterns support. The official `pip install mempalace` package will
+**not** work — you must use [Lochlyn's fork](https://github.com/2loch-ness6/mempalace)
+(branch `feat/exclude-patterns-config`).
+
+The easiest way to get this set up is the **setup script** (see Quick Start).
 
 ---
 
 ## Quick Start
 
-### 1. Install the MCP server
+### 1. Run the setup script (recommended)
+
+The fastest way to get up and running is the bootstrap script at
+`scripts/setup-mempalace.sh`. It handles the entire MemPalace setup:
+
+- Clones Lochlyn's fork with the required exclude-patterns support
+- Creates a Python virtual environment
+- Installs the fork in editable mode
+- Symlinks the `mempalace` CLI to `~/.local/bin`
+- Prepares the palace data directory
+- Optionally runs the initial codebase index
+
+```bash
+# From the repo root:
+./scripts/setup-mempalace.sh
+
+# To also index your codebase right away:
+./scripts/setup-mempalace.sh --mine
+```
+
+The script is fully configurable via environment variables:
+
+| Env var | Default | Description |
+|---|---|---|
+| `MEMPALACE_FORK_URL` | `https://github.com/2loch-ness6/mempalace` | Fork with required exclude-patterns support |
+| `MEMPALACE_FORK_BRANCH` | `feat/exclude-patterns-config` | Branch containing the feature |
+| `MEMPALACE_FORK_DIR` | `$HOME/.mempalace-fork` | Where to clone the fork |
+| `MEMPALACE_VENV_DIR` | `$HOME/.mempalace` | Python venv location |
+| `MCP_PALACE_DIR` | `<repo-root>/.palace/active` | Palace data directory |
+| `MCP_PALACE_WING` | `code` | Palace wing (namespace) |
+| `MCP_REPO_DIR` | `<repo-root>` | Source code to mine |
+
+After the script finishes, check that everything works:
+
+```bash
+mempalace --version
+mempalace --palace ~/.mempalace/active status
+```
+
+### 2. Install the MCP server
 
 ```bash
 npm install -g @mempalace/mcp-dev
@@ -45,51 +85,38 @@ Or use without installing via `npx`:
 npx @mempalace/mcp-dev
 ```
 
-### 2. Configure environment variables
+### 3. Configure environment variables
 
 ```bash
 export MCP_REPO_DIR=/path/to/your/repo        # defaults to process.cwd()
 export MCP_PALACE_DIR=~/.mempalace/active      # MemPalace data directory
 export MCP_PALACE_WING=code                    # wing name (namespace) for your repo
-export MEMPALACE_PYTHON=python3                # python binary with mempalace installed
+export MEMPALACE_PYTHON=/path/to/venv/bin/python3  # python with fork installed
 ```
 
-### 3. Index your codebase
+> If you used the setup script, set `MEMPALACE_PYTHON` to `$HOME/.mempalace/bin/python3`
+(or wherever `MEMPALACE_VENV_DIR` points).
 
-```bash
-mempalace --palace ~/.mempalace/active mine /path/to/your/repo --wing code --mode projects
+### 4. Add to your MCP client config
+
+For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "mempalace-mcp-dev": {
+      "command": "npx",
+      "args": ["@mempalace/mcp-dev"],
+      "env": {
+        "MCP_REPO_DIR": "/path/to/your/repo",
+        "MCP_PALACE_DIR": "/home/you/.mempalace/active",
+        "MCP_PALACE_WING": "code",
+        "MEMPALACE_PYTHON": "/home/you/.mempalace/bin/python3"
+      }
+    }
+  }
+}
 ```
-
-### 4. (Alternative) Use the setup script
-
-A convenience script is provided at `scripts/setup-mempalace.sh` that automates the
-MemPalace bootstrap for this MCP server. It clones Lochlyn's fork (with the
-necessary exclude-patterns support), creates a Python venv, installs the fork
-in editable mode, symlinks the CLI, and prepares the palace directory.
-
-```bash
-# From the repo root:
-./scripts/setup-mempalace.sh
-
-# Or to also do the initial mine of your codebase:
-./scripts/setup-mempalace.sh --mine
-```
-
-The script is fully env-overridable (see top of file for options):
-
-| Env var | Default | Description |
-|---|---|---|
-| `MEMPALACE_FORK_URL` | `https://github.com/2loch-ness6/mempalace` | Fork URL with multi-branch support |
-| `MEMPALACE_FORK_BRANCH` | `feat/exclude-patterns-config` | Branch with exclude-patterns feature |
-| `MEMPALACE_FORK_DIR` | `$HOME/.mempalace-fork` | Where to clone the fork |
-| `MEMPALACE_VENV_DIR` | `$HOME/.mempalace` | Python venv location |
-| `MCP_PALACE_DIR` | `<repo-root>/.palace/active` | Palace data directory |
-| `MCP_PALACE_WING` | `code` | Palace wing (namespace) |
-| `MCP_REPO_DIR` | `<repo-root>` | Source code to mine |
-
----
-
-### 5. Add to your MCP client config
 
 For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 
@@ -121,7 +148,7 @@ For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.
 | `MCP_PALACE_WING` | `code` | Wing (namespace) name within the palace |
 | `MCP_LEDGER_PATH` | `<repo>/.mcp-dev/ledger.jsonl` | Path to the change ledger file |
 | `MCP_TRACKS_DIR` | `<repo>/conductor/tracks` | Directory containing project track folders |
-| `MEMPALACE_PYTHON` | `python3` | Python binary (must have `mempalace` installed) |
+| `MEMPALACE_PYTHON` | `python3` | Python binary (must have the MemPalace fork installed) |
 
 ---
 

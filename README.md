@@ -60,7 +60,36 @@ export MEMPALACE_PYTHON=python3                # python binary with mempalace in
 mempalace --palace ~/.mempalace/active mine /path/to/your/repo --wing code --mode projects
 ```
 
-### 4. Add to your MCP client config
+### 4. (Alternative) Use the setup script
+
+A convenience script is provided at `scripts/setup-mempalace.sh` that automates the
+MemPalace bootstrap for this MCP server. It clones Lochlyn's fork (with the
+necessary exclude-patterns support), creates a Python venv, installs the fork
+in editable mode, symlinks the CLI, and prepares the palace directory.
+
+```bash
+# From the repo root:
+./scripts/setup-mempalace.sh
+
+# Or to also do the initial mine of your codebase:
+./scripts/setup-mempalace.sh --mine
+```
+
+The script is fully env-overridable (see top of file for options):
+
+| Env var | Default | Description |
+|---|---|---|
+| `MEMPALACE_FORK_URL` | `https://github.com/2loch-ness6/mempalace` | Fork URL with multi-branch support |
+| `MEMPALACE_FORK_BRANCH` | `feat/exclude-patterns-config` | Branch with exclude-patterns feature |
+| `MEMPALACE_FORK_DIR` | `$HOME/.mempalace-fork` | Where to clone the fork |
+| `MEMPALACE_VENV_DIR` | `$HOME/.mempalace` | Python venv location |
+| `STATICK_PALACE_DIR` | `<repo-root>/.palace/active` | Palace data directory |
+| `STATICK_PALACE_WING` | `statick_code` | Palace wing (namespace) |
+| `STATICK_REPO_DIR` | `<repo-root>/Statick-Industries` | Source code to mine |
+
+---
+
+### 5. Add to your MCP client config
 
 For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 

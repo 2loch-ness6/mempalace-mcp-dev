@@ -83,9 +83,9 @@ The script is fully env-overridable (see top of file for options):
 | `MEMPALACE_FORK_BRANCH` | `feat/exclude-patterns-config` | Branch with exclude-patterns feature |
 | `MEMPALACE_FORK_DIR` | `$HOME/.mempalace-fork` | Where to clone the fork |
 | `MEMPALACE_VENV_DIR` | `$HOME/.mempalace` | Python venv location |
-| `STATICK_PALACE_DIR` | `<repo-root>/.palace/active` | Palace data directory |
-| `STATICK_PALACE_WING` | `statick_code` | Palace wing (namespace) |
-| `STATICK_REPO_DIR` | `<repo-root>/Statick-Industries` | Source code to mine |
+| `MCP_PALACE_DIR` | `<repo-root>/.palace/active` | Palace data directory |
+| `MCP_PALACE_WING` | `code` | Palace wing (namespace) |
+| `MCP_REPO_DIR` | `<repo-root>` | Source code to mine |
 
 ---
 

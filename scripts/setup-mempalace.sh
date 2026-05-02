@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# setup-mempalace.sh — Bootstrap MemPalace for statick-mcp-dev on a new dev machine.
+# setup-mempalace.sh — Bootstrap MemPalace for mempalace-mcp-dev on a new dev machine.
 #
 # Usage:
-#   ./setup-mempalace.sh           # setup only
-#   ./setup-mempalace.sh --mine    # setup + full initial index of the codebase
+#   ./scripts/setup-mempalace.sh           # setup only
+#   ./scripts/setup-mempalace.sh --mine    # setup + full initial index of the codebase
 #
-# All paths are env-overridable. Defaults match the statick-mcp-dev MCP server
-# config in packages/mcp-dev/src/index.ts and src/access/MemPalaceAccess.ts.
+# All paths are env-overridable. Defaults match the MCP server config.
 #
 # Env vars:
 #   MEMPALACE_FORK_URL     Fork to clone (default: https://github.com/2loch-ness6/mempalace)
@@ -14,9 +13,9 @@
 #   MEMPALACE_FORK_DIR     Where to clone the fork (default: $HOME/.mempalace-fork)
 #   MEMPALACE_VENV_DIR     Python venv location (default: $HOME/.mempalace)
 #   MEMPALACE_PYTHON       python3 binary to create the venv (default: auto-detected)
-#   STATICK_PALACE_DIR     Palace data directory (default: <git-root>/.palace/active)
-#   STATICK_PALACE_WING    Wing name to use when mining (default: statick_code)
-#   STATICK_REPO_DIR       Monorepo source to mine (default: <git-root>/Statick-Industries)
+#   MCP_PALACE_DIR         Palace data directory (default: <git-root>/.palace/active)
+#   MCP_PALACE_WING        Wing name to use when mining (default: code)
+#   MCP_REPO_DIR           Source code to mine (default: <git-root>)
 
 set -euo pipefail
 
@@ -27,18 +26,18 @@ warn()    { echo "${BOLD}${YELLOW}[setup-mempalace] WARN:${RESET} $*"; }
 err()     { echo "${BOLD}${RED}[setup-mempalace] ERROR:${RESET} $*" >&2; }
 section() { echo ""; echo "${BOLD}── $* ──────────────────────────────────────${RESET}"; }
 
-# ── Locate repo root (this script lives there) ────────────────────────────────
+# ── Locate repo root (script lives in scripts/ so go up one) ─────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GIT_ROOT="$SCRIPT_DIR"
+GIT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # ── Defaults (all overridable via env) ───────────────────────────────────────
 FORK_URL="${MEMPALACE_FORK_URL:-https://github.com/2loch-ness6/mempalace}"
 FORK_BRANCH="${MEMPALACE_FORK_BRANCH:-feat/exclude-patterns-config}"
 FORK_DIR="${MEMPALACE_FORK_DIR:-$HOME/.mempalace-fork}"
 VENV_DIR="${MEMPALACE_VENV_DIR:-$HOME/.mempalace}"
-PALACE_DIR="${STATICK_PALACE_DIR:-$GIT_ROOT/.palace/active}"
-PALACE_WING="${STATICK_PALACE_WING:-statick_code}"
-REPO_DIR="${STATICK_REPO_DIR:-$GIT_ROOT/Statick-Industries}"
+PALACE_DIR="${MCP_PALACE_DIR:-$GIT_ROOT/.palace/active}"
+PALACE_WING="${MCP_PALACE_WING:-code}"
+REPO_DIR="${MCP_REPO_DIR:-$GIT_ROOT}"
 
 # ── Parse args ────────────────────────────────────────────────────────────────
 DO_MINE=false
@@ -46,7 +45,7 @@ for arg in "$@"; do
   case "$arg" in
     --mine) DO_MINE=true ;;
     --help|-h)
-      sed -n '2,20p' "${BASH_SOURCE[0]}" | sed 's/^# \?//'
+      sed -n '2,18p' "${BASH_SOURCE[0]}" | sed 's/^# \?//'
       exit 0
       ;;
     *) err "Unknown argument: $arg"; exit 1 ;;
@@ -71,7 +70,7 @@ info "Using Python: $PYTHON_BIN ($PYTHON_VERSION)"
 # ── Validate repo dir ─────────────────────────────────────────────────────────
 if [ ! -d "$REPO_DIR" ]; then
   err "Repo dir not found: $REPO_DIR"
-  err "Set STATICK_REPO_DIR or run this script from the git root."
+  err "Set MCP_REPO_DIR or run this script from the repo root."
   exit 1
 fi
 MEMPALACE_YAML="$REPO_DIR/mempalace.yaml"
@@ -197,11 +196,11 @@ echo "  ${BOLD}Repo dir:${RESET}      $REPO_DIR"
 echo ""
 
 # ── MCP server env vars to document ──────────────────────────────────────────
-echo "  ${BOLD}Set these env vars for statick-mcp-dev (if not using defaults):${RESET}"
-echo "    STATICK_PALACE_DIR=$PALACE_DIR"
-echo "    STATICK_PALACE_WING=$PALACE_WING"
+echo "  ${BOLD}Set these env vars for mempalace-mcp-dev (if not using defaults):${RESET}"
+echo "    MCP_PALACE_DIR=$PALACE_DIR"
+echo "    MCP_PALACE_WING=$PALACE_WING"
+echo "    MCP_REPO_DIR=$REPO_DIR"
 echo "    MEMPALACE_PYTHON=$VENV_PYTHON"
-echo "    STATICK_REPO_DIR=$REPO_DIR"
 echo ""
 
 # =============================================================================

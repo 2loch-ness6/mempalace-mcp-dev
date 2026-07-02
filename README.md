@@ -1,4 +1,4 @@
-# @mempalace/mcp-dev
+# mempalace-mcp-dev
 
 An MCP (Model Context Protocol) server that gives AI coding assistants grounded, branch-scoped context about your codebase. It provides semantic code search via [my MemPalace fork](https://github.com/2loch-ness6/mempalace), git change tracking, a persistent change ledger, TypeScript/Jest dev lifecycle tools, and a built-in **Project Tracks** (Conductor) methodology for structured feature work.
 
@@ -73,16 +73,23 @@ mempalace --version
 mempalace --palace ~/.mempalace/active status
 ```
 
-### 2. Install the MCP server
+### 2. Clone and build the MCP server
+
+This is not published to npm. Clone and build locally:
 
 ```bash
-npm install -g @mempalace/mcp-dev
+git clone https://github.com/2loch-ness6/mempalace-mcp-dev
+cd mempalace-mcp-dev
+npm install
+npm run build
 ```
 
-Or use without installing via `npx`:
+After building, you can use `npm link` to make `mempalace-mcp-dev` available globally:
 
 ```bash
-npx @mempalace/mcp-dev
+npm link
+# Now this works from anywhere:
+mempalace-mcp-dev
 ```
 
 ### 3. Configure environment variables
@@ -99,14 +106,14 @@ export MEMPALACE_PYTHON=/path/to/venv/bin/python3  # python with fork installed
 
 ### 4. Add to your MCP client config
 
-For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+For Claude Desktop and other MCP clients:
 
 ```json
 {
   "mcpServers": {
     "mempalace-mcp-dev": {
-      "command": "npx",
-      "args": ["@mempalace/mcp-dev"],
+      "command": "node",
+      "args": ["/path/to/mempalace-mcp-dev/dist/index.js"],
       "env": {
         "MCP_REPO_DIR": "/path/to/your/repo",
         "MCP_PALACE_DIR": "/home/you/.mempalace/active",
@@ -118,14 +125,13 @@ For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.
 }
 ```
 
-For Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+If you ran `npm link`, you can also use the shorter form:
 
 ```json
 {
   "mcpServers": {
     "mempalace-mcp-dev": {
-      "command": "npx",
-      "args": ["@mempalace/mcp-dev"],
+      "command": "mempalace-mcp-dev",
       "env": {
         "MCP_REPO_DIR": "/path/to/your/repo",
         "MCP_PALACE_DIR": "/home/you/.mempalace/active",
@@ -244,7 +250,7 @@ Key sections:
 ## Development
 
 ```bash
-git clone https://github.com/your-org/mempalace-mcp-dev
+git clone https://github.com/2loch-ness6/mempalace-mcp-dev
 cd mempalace-mcp-dev
 npm install
 npm run build

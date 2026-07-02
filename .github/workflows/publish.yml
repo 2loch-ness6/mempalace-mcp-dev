@@ -1,13 +1,15 @@
-name: Publish to npm
+name: Build & Test (npm publish disabled)
 
 on:
   release:
     types: [published]
 
 jobs:
-  publish:
-    name: Publish @mempalace/mcp-dev
+  build-and-test:
+    name: Build & Test
     runs-on: ubuntu-latest
+    # Publish step disabled — this package is not distributed via npm.
+    # To publish in the future, add an NPM_TOKEN secret and uncomment the publish step.
 
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +30,8 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Publish
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Publish disabled — this package is not on npm.
+      # - name: Publish
+      #   run: npm publish --access public
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

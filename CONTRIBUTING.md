@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for your interest in contributing to `@mempalace/mcp-dev`.
+Thank you for your interest in contributing to `mempalace-mcp-dev`.
 
 ## Getting Started
 

@@ -1,5 +1,5 @@
 {
-  "name": "@mempalace/mcp-dev",
+  "name": "mempalace-mcp-dev",
   "version": "1.0.0",
   "description": "MCP server for branch-scoped code grounding, change ledger, semantic search via MemPalace, and project-track management",
   "type": "module",
@@ -39,9 +39,6 @@
     "LICENSE",
     "mempalace.yaml.example"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "zod": "^3.22.0"
@@ -54,5 +51,7 @@
     "ts-jest": "^29.4.9",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0"
-  }
+  },
+  "private": true
 }
+
